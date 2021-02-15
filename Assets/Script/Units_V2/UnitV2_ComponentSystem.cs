@@ -7,7 +7,7 @@ using Unity.Jobs;
 using Unity.Mathematics;
 using Unity.Rendering;
 using Unity.Transforms;
-
+/*
 public class UnitV2_ComponentSystem : SystemBase
 {
     BeginInitializationEntityCommandBufferSystem ei_ECB;
@@ -66,22 +66,7 @@ public class UnitV2_ComponentSystem : SystemBase
     // Update is called once per frame
     protected override void OnUpdate()
     {
-        /*
-        var ecb = ei_ECB.CreateCommandBuffer().AsParallelWriter();
-        Entities
-            .WithBurst(synchronousCompilation: true)
-            .ForEach((Entity e, int entityInQueryIndex, in UnitV2_ComponentData uic, in LocalToWorld ltw) =>
-            {
-                for (int i = 0; i < 4; i++)
-                {
-                    Entity defEntity = ecb.Instantiate(entityInQueryIndex, uic.Prefab);
-                    float3 _position = new float3(20 + i * 2, 5, 20 + i);
-                    ecb.SetComponent(entityInQueryIndex, defEntity, new Translation { Value = _position });
-                }
-                ecb.DestroyEntity(entityInQueryIndex, e);
-            }
-            ).ScheduleParallel();
-            ei_ECB.AddJobHandleForProducer(Dependency);
-        */
+
     }
 }
+*/
