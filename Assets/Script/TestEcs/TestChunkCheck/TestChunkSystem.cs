@@ -81,7 +81,7 @@ public class TestChunkSystem : SystemBase
             foreach (ArchetypeChunk chunk in chunks)
             {
                 //Get the current array of the chunk so. we SHALL NOT DISPOSE THEM!
-                NativeArray<CompA> aVals = chunk.GetNativeArray<CompA>(aType);
+                NativeArray<CompA> aVals = chunk.GetNativeArray<CompA>(aType); //CAUTION UNITY.COLLETION NEEDED FOR NATIVEARRAY!!
                 for (int i = 0; i < chunk.Count; i++)
                 {
                     CompA a = aVals[i];
