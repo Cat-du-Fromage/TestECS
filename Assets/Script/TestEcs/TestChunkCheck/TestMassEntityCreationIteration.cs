@@ -75,9 +75,9 @@ public class TestMassEntityCreationIteration : SystemBase
                 for (int i = 0; i < chunk.Count; i++)
                 {
                     CompC a = aVals[i];
-                    if(aVals[i].Health == 30)
+                    if(aVals[i].Health == 30) // select the only entity who has 30 health
                     {
-                        Debug.Log("TROUVÉE " + aVals[i].Health + " " + i);
+                        Debug.Log("TROUVÉE " + aVals[i].Health + " " + i); //careful "i" don't represent the ID of the entity..
                     }
                     //a.Health = 10;
                     //aVals[i] = a;
@@ -85,5 +85,6 @@ public class TestMassEntityCreationIteration : SystemBase
             }
             chunks.Dispose();
         }
+
     }
 }
