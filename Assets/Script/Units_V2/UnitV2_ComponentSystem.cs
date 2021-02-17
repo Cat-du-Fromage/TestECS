@@ -7,7 +7,7 @@ using Unity.Jobs;
 using Unity.Mathematics;
 using Unity.Rendering;
 using Unity.Transforms;
-/*
+
 public class UnitV2_ComponentSystem : SystemBase
 {
     BeginInitializationEntityCommandBufferSystem ei_ECB;
@@ -69,4 +69,4 @@ public class UnitV2_ComponentSystem : SystemBase
 
     }
 }
-*/
+
