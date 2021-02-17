@@ -10,7 +10,7 @@ using Unity.Jobs;
 public class TestSelectionEntity : SystemBase
 {
     private float3 startPosition;
-    //private float3 endPosition;
+    private float3 endPosition;
 
     public Ray ray;
     // Start is called before the first frame update
@@ -31,13 +31,23 @@ public class TestSelectionEntity : SystemBase
 
         if(Input.GetMouseButtonDown(0))
         {
-            startPosition = TestUtils.GetMouseWorldPosition();
+            //startPosition = TestUtils.GetMouseWorldPosition();
+            startPosition = Input.mousePosition;
             Debug.Log(startPosition);
+        }
+
+        if(Input.GetMouseButton(0))
+        {
+            if(math.length(startPosition - (float3)Input.mousePosition) > 10)
+            {
+                Debug.Log(math.length(startPosition - (float3)Input.mousePosition));
+            }
         }
 
         if(Input.GetMouseButtonUp(0))
         {
-            float3 endPosition = TestUtils.GetMouseWorldPosition();
+            //endPosition = TestUtils.GetMouseWorldPosition();
+            endPosition = Input.mousePosition;
 
             float3 lowerLeftPosition = new float3(math.min(startPosition.x, endPosition.x), 0, math.min(startPosition.z, endPosition.z));
             float3 upperRightPosition = new float3(math.max(startPosition.x, endPosition.x), 0, math.max(startPosition.z, endPosition.z));
