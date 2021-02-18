@@ -16,7 +16,7 @@ public class TestSelectionEntity : SystemBase
 
     public bool dragSelect;
 
-    private EntityQuery query;
+    private EntityManager _entityManager;
 
     /// <summary>
     /// ECS RAYCAST BASIC Construction
@@ -67,6 +67,7 @@ public class TestSelectionEntity : SystemBase
     protected override void OnStartRunning()
     {
         dragSelect = false;
+        _entityManager = World.DefaultGameObjectInjectionWorld.EntityManager;
     }
 
     // Update is called once per frame
@@ -74,9 +75,7 @@ public class TestSelectionEntity : SystemBase
     {
         if (Input.GetMouseButtonDown(0))
         {
-            //startPosition = TestUtils.GetMouseWorldPosition();
             startPosition = Input.mousePosition;
-            //Debug.Log(startPosition);
         }
 
         if(Input.GetMouseButton(0))
@@ -84,16 +83,18 @@ public class TestSelectionEntity : SystemBase
             dragSelect = math.length(startPosition - (float3)Input.mousePosition) > 10 ? true : false;
         }
 
-        //USING classic unityEngineRay and it seems it doesn't work....
         if(Input.GetMouseButtonUp(0))
         {
             //Simple Click without drag
             if(dragSelect == false)
             {
-                //UnityEngine.Ray ray = Camera.main.ScreenPointToRay(new Vector3(Input.mousePosition.x, Input.mousePosition.y, Camera.main.nearClipPlane));
                 UnityEngine.Ray ray = Camera.main.ScreenPointToRay(startPosition);
-                Debug.Log(Raycast(ray.origin, ray.direction * 50000f));
-                Debug.Log(startPosition);
+                Entity _entHit = Raycast(ray.origin, ray.direction * 50000f);
+                if (_entityManager.HasComponent<UnitV2_ComponentData>(_entHit))
+                {
+                    //ADD SELECTION COMPONENT
+                    Debug.Log(_entHit);
+                }
                 
                 //SET "Unit Selected" add component(shareComponent)
                 //find all his regiment and add component to them too
@@ -101,12 +102,11 @@ public class TestSelectionEntity : SystemBase
             else
             {
                 endPosition = Input.mousePosition;
-                Debug.Log(startPosition);
-                Debug.Log(endPosition);
                 //WHY not the z vector???!!
                 float3 lowerLeftPosition = new float3(math.min(startPosition.x, endPosition.x), math.min(startPosition.y, endPosition.y), 0);
                 float3 upperRightPosition = new float3(math.max(startPosition.x, endPosition.x), math.max(startPosition.y, endPosition.y), 0);
                 Entities
+                    //Select Only Entities wit at least this component
                     .WithAll<UnitV2_ComponentData>()
                     .ForEach((Entity entity, ref Translation translation) =>
                 {
@@ -118,6 +118,7 @@ public class TestSelectionEntity : SystemBase
                        screenPos.x <= upperRightPosition.x &&
                        screenPos.y <= upperRightPosition.y)
                     {
+                        //ADD SELECTION COMPONENT
                         Debug.Log(entity);
                     }
 

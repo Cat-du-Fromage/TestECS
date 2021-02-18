@@ -60,13 +60,25 @@ public class UnitV2_ComponentSystem : SystemBase
         EntityQuery m_Group = GetEntityQuery(typeof(UnitV2_ComponentData));
         int num = m_Group.CalculateEntityCount();
         _entityManager.SetComponentData(regimentTest, new RegimentData { Health = num });
-
     }
 
     // Update is called once per frame
     protected override void OnUpdate()
     {
 
+    }
+
+    public void MergeEntitiesTogether(Entity parent, Entity child)
+    {
+
+        if (!_entityManager.HasComponent(child, typeof(Parent)))
+        {
+            _entityManager.AddComponentData(child, new Parent { Value = parent });
+            _entityManager.AddComponentData(child, new LocalToParent());
+
+            DynamicBuffer<LinkedEntityGroup> buf = _entityManager.GetBuffer<LinkedEntityGroup>(parent);
+            buf.Add(child);
+        }
     }
 }
 
