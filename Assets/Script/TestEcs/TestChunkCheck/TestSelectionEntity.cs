@@ -14,10 +14,16 @@ public class TestSelectionEntity : SystemBase
     private float3 startPosition;
     private float3 endPosition;
 
-    UnityEngine.RaycastHit hit;
     public bool dragSelect;
 
-    //ECS RAYCAST BASIC Construction
+    private EntityQuery query;
+
+    /// <summary>
+    /// ECS RAYCAST BASIC Construction
+    /// </summary>
+    /// <param name="fromPosition"></param>
+    /// <param name="toPosition"></param>
+    /// <returns></returns>
     private Entity Raycast(float3 fromPosition, float3 toPosition)
     {
         //WTF IS THIS??!!
@@ -75,17 +81,6 @@ public class TestSelectionEntity : SystemBase
 
         if(Input.GetMouseButton(0))
         {
-            /*
-            if(math.length(startPosition - (float3)Input.mousePosition) > 10)
-            {
-                Debug.Log(math.length(startPosition - (float3)Input.mousePosition));
-                dragSelect = true;
-            }
-            else
-            {
-                dragSelect = false;
-            }
-            */
             dragSelect = math.length(startPosition - (float3)Input.mousePosition) > 10 ? true : false;
         }
 
@@ -102,56 +97,39 @@ public class TestSelectionEntity : SystemBase
                 
                 //SET "Unit Selected" add component(shareComponent)
                 //find all his regiment and add component to them too
-
-
-                /*
-                if (Physics.Raycast(ray, out hit, 50000f))
+            }
+            else
+            {
+                endPosition = Input.mousePosition;
+                Debug.Log(startPosition);
+                Debug.Log(endPosition);
+                //WHY not the z vector???!!
+                float3 lowerLeftPosition = new float3(math.min(startPosition.x, endPosition.x), math.min(startPosition.y, endPosition.y), 0);
+                float3 upperRightPosition = new float3(math.max(startPosition.x, endPosition.x), math.max(startPosition.y, endPosition.y), 0);
+                Entities
+                    .WithAll<UnitV2_ComponentData>()
+                    .ForEach((Entity entity, ref Translation translation) =>
                 {
-                    Debug.Log("raycast touché");
-                    if (Input.GetKey(KeyCode.LeftShift))
-                    {
-                        //ajouter Component Selection
-                        Debug.Log("add to the current selection");
 
-                    }
-                    else
+                    float3 entityPosition = translation.Value;
+                    float3 screenPos = Camera.main.WorldToScreenPoint(entityPosition);
+                    if (screenPos.x >= lowerLeftPosition.x &&
+                       screenPos.y >= lowerLeftPosition.y &&
+                       screenPos.x <= upperRightPosition.x &&
+                       screenPos.y <= upperRightPosition.y)
                     {
-                        //deselectionner TOUT
-                        //selectionner l'entité
-                        Debug.Log("Deselection + select one regiment");
+                        Debug.Log(entity);
                     }
-                }
-                */
+
+                })
+                    .WithoutBurst()
+                    .Run();
+                    //.ScheduleParallel();
             }
 
 
         }
-        /*
-        if(Input.GetMouseButtonUp(0))
-        {
-            //endPosition = TestUtils.GetMouseWorldPosition();
-            endPosition = Input.mousePosition;
-
-            float3 lowerLeftPosition = new float3(math.min(startPosition.x, endPosition.x), 0, math.min(startPosition.z, endPosition.z));
-            float3 upperRightPosition = new float3(math.max(startPosition.x, endPosition.x), 0, math.max(startPosition.z, endPosition.z));
-            Debug.Log(endPosition);
-            Entities.ForEach((Entity entity, ref Translation translation) =>
-            {
-                float3 entityPosition = translation.Value;
-                if (entityPosition.x >= lowerLeftPosition.x &&
-                   entityPosition.z >= lowerLeftPosition.z &&
-                   entityPosition.x <= upperRightPosition.x &&
-                   entityPosition.z <= upperRightPosition.z)
-                {
-                    Debug.Log(entity);
-                }
-
-            })
-                .WithoutBurst()
-                //.Run();
-                .ScheduleParallel();
-
-        }
-        */
     }
+
+
 }
