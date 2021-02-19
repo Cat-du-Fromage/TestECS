@@ -46,6 +46,7 @@ public class Unit : MonoBehaviour, IConvertGameObjectToEntity, IDeclareReference
 
 
     }
+    
     /*
     private void Awake()
     {

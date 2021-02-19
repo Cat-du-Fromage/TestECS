@@ -17,6 +17,19 @@ public struct CompD : IComponentData
 {
     public int CombatCC;
     public int CombatCR;
+    public static CompD Default
+    {
+        get
+        {
+            CompD compD = new CompD
+            {
+                CombatCC = 1,
+                CombatCR = 1
+            };
+
+            return compD;
+        }
+    }
 }
 
 public class TestMassEntityCreationIteration : SystemBase

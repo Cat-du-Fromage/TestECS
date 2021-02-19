@@ -11,13 +11,17 @@ using Unity.Physics;
 
 public class TestSelectionEntity : SystemBase
 {
-    private float3 startPosition;
-    private float3 endPosition;
+    public float3 startPosition;
+    public float3 endPosition;
 
     public bool dragSelect;
+    private float widthBoxSelect;
+    private float heightBoxSelect;
 
     private EntityManager _entityManager;
 
+    #region RAYCAST ECS
+    //==========================================================================================================================
     /// <summary>
     /// ECS RAYCAST BASIC Construction
     /// </summary>
@@ -57,7 +61,8 @@ public class TestSelectionEntity : SystemBase
         }
 
     }
-
+    //==========================================================================================================================
+    #endregion RAYCAST ECS
     // Start is called before the first frame update
     protected override void OnCreate()
     {
@@ -76,17 +81,26 @@ public class TestSelectionEntity : SystemBase
         if (Input.GetMouseButtonDown(0))
         {
             startPosition = Input.mousePosition;
+            TestSelectionMonoPart.instance.selectionBox.gameObject.SetActive(true); //SelectionBox SHOW
         }
 
         if(Input.GetMouseButton(0))
         {
             dragSelect = math.length(startPosition - (float3)Input.mousePosition) > 10 ? true : false;
+
+            widthBoxSelect = Input.mousePosition.x - startPosition.x;
+            heightBoxSelect = Input.mousePosition.y - startPosition.y;
+
+            TestSelectionMonoPart.instance.selectionBox.sizeDelta = new float2(math.abs(widthBoxSelect), math.abs(heightBoxSelect));
+            TestSelectionMonoPart.instance.selectionBox.anchoredPosition = new float2(startPosition.x, startPosition.y) + new float2(widthBoxSelect/2, heightBoxSelect/2);
         }
 
         if(Input.GetMouseButtonUp(0))
         {
+            
+            TestSelectionMonoPart.instance.selectionBox.gameObject.SetActive(false); //SelectionBox HIDE
             //Simple Click without drag
-            if(dragSelect == false)
+            if (dragSelect == false)
             {
                 UnityEngine.Ray ray = Camera.main.ScreenPointToRay(startPosition);
                 Entity _entHit = Raycast(ray.origin, ray.direction * 50000f);
@@ -125,12 +139,12 @@ public class TestSelectionEntity : SystemBase
                 })
                     .WithoutBurst()
                     .Run();
-                    //.ScheduleParallel();
+                    //.ScheduleParallel(); ATTENTION pas de burst ici , car Camera.main n'est pas une fonction ECS
+                    // Tout variable ou methods NON-ECS bloque burst?
             }
 
 
         }
+
     }
-
-
 }
