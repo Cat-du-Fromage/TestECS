@@ -8,8 +8,8 @@ using Unity.Collections;
 using Unity.Jobs;
 using Unity.Physics.Systems;
 using Unity.Physics;
-
-public class TestSelectionEntity : SystemBase
+/*
+public class TestSelectionEntityCommandBuffer : SystemBase
 {
     public float3 startPosition;
     public float3 endPosition;
@@ -20,6 +20,7 @@ public class TestSelectionEntity : SystemBase
 
     private EntityManager _entityManager;
 
+    EndSimulationEntityCommandBufferSystem m_EntityCommandBufferSystem; //COMMAND BUFFER SYSTEM
     #region RAYCAST ECS
     //==========================================================================================================================
     /// <summary>
@@ -47,7 +48,7 @@ public class TestSelectionEntity : SystemBase
         };
         //throw a raycast
         Unity.Physics.RaycastHit raycastHit = new Unity.Physics.RaycastHit();
-        if(collisionWorld.CastRay(raycastInput, out raycastHit))
+        if (collisionWorld.CastRay(raycastInput, out raycastHit))
         {
             //Return the entity hit
             Entity hitEntity = buildPhysicsWorld.PhysicsWorld.Bodies[raycastHit.RigidBodyIndex].Entity;
@@ -65,6 +66,8 @@ public class TestSelectionEntity : SystemBase
     protected override void OnCreate()
     {
         base.OnCreate();
+        m_EntityCommandBufferSystem = World.GetOrCreateSystem<EndSimulationEntityCommandBufferSystem>(); //COMMAND BUFFER SYSTEM
+
     }
 
     protected override void OnStartRunning()
@@ -76,13 +79,15 @@ public class TestSelectionEntity : SystemBase
     // Update is called once per frame
     protected override void OnUpdate()
     {
+        var bufferSystem = m_EntityCommandBufferSystem.CreateCommandBuffer().AsParallelWriter();
+
         if (Input.GetMouseButtonDown(0))
         {
             startPosition = Input.mousePosition;
             TestSelectionMonoPart.instance.selectionBox.gameObject.SetActive(true); //SelectionBox SHOW
         }
 
-        if(Input.GetMouseButton(0))
+        if (Input.GetMouseButton(0))
         {
             dragSelect = math.length(startPosition - (float3)Input.mousePosition) > 10 ? true : false;
 
@@ -90,12 +95,12 @@ public class TestSelectionEntity : SystemBase
             heightBoxSelect = Input.mousePosition.y - startPosition.y;
 
             TestSelectionMonoPart.instance.selectionBox.sizeDelta = new float2(math.abs(widthBoxSelect), math.abs(heightBoxSelect));
-            TestSelectionMonoPart.instance.selectionBox.anchoredPosition = new float2(startPosition.x, startPosition.y) + new float2(widthBoxSelect/2, heightBoxSelect/2);
+            TestSelectionMonoPart.instance.selectionBox.anchoredPosition = new float2(startPosition.x, startPosition.y) + new float2(widthBoxSelect / 2, heightBoxSelect / 2);
         }
 
-        if(Input.GetMouseButtonUp(0))
+        if (Input.GetMouseButtonUp(0))
         {
-            
+
             TestSelectionMonoPart.instance.selectionBox.gameObject.SetActive(false); //SelectionBox HIDE
             //Simple Click without drag
             if (dragSelect == false)
@@ -105,10 +110,9 @@ public class TestSelectionEntity : SystemBase
                 if (_entityManager.HasComponent<UnitV2_ComponentData>(_entHit))
                 {
                     //ADD SELECTION COMPONENT
-                    _entityManager.RemoveComponent<SelectedUnit>(_entHit); // REMOVE component SELECTIONUNIT; NOTE: Unit with removed component goes in the same chunk
                     Debug.Log(_entHit);
                 }
-                
+
                 //SET "Unit Selected" add component(shareComponent)
                 //find all his regiment and add component to them too
             }
@@ -124,29 +128,32 @@ public class TestSelectionEntity : SystemBase
                 float3 lowerLeftPosition = new float3(math.min(startPosition.x, endPosition.x), math.min(startPosition.y, endPosition.y), 0);
                 float3 upperRightPosition = new float3(math.max(startPosition.x, endPosition.x), math.max(startPosition.y, endPosition.y), 0);
                 Entities
-                    .WithStructuralChanges() // allow to use MainThread structural change , CAREFULL this does not allow BURST COMPILE
-                    .WithAll<UnitV2_ComponentData>()//Select Only Entities wit at least this component
-                    .ForEach((Entity entity, ref Translation translation) =>
-                {
-
-                    float3 entityPosition = translation.Value;
-                    float3 screenPos = Camera.main.WorldToScreenPoint(entityPosition);
-                    if (screenPos.x >= lowerLeftPosition.x &&
-                       screenPos.y >= lowerLeftPosition.y &&
-                       screenPos.x <= upperRightPosition.x &&
-                       screenPos.y <= upperRightPosition.y)
-
+                     .WithStructuralChanges() // allow to use MainThread structural change , CAREFULL this does not allow BURST COMPILE
+                    //Select Only Entities wit at least this component
+                    .WithAll<UnitV2_ComponentData>()
+                    .ForEach((Entity entity, int entityInQueryIndex, ref Translation translation) =>
                     {
-                        _entityManager.SetComponentData<UnitV2_ComponentData>(entity, new UnitV2_ComponentData { CombatMelee = 100 });// ATTENTION: no need for ".WithStructuralChanges()" 
-                        _entityManager.AddComponent<SelectedUnit>(entity); // Add SelectionComponent : ATTENTION: NEED ".WithStructuralChanges()" to work
-                        Debug.Log(entity);
-                    }
 
-                })
+                        float3 entityPosition = translation.Value;
+                        float3 screenPos = Camera.main.WorldToScreenPoint(entityPosition);
+                        if (screenPos.x >= lowerLeftPosition.x &&
+                           screenPos.y >= lowerLeftPosition.y &&
+                           screenPos.x <= upperRightPosition.x &&
+                           screenPos.y <= upperRightPosition.y)
+
+                        {
+                            //ADD SELECTION COMPONENT
+                            _entityManager.SetComponentData<UnitV2_ComponentData>(entity, new UnitV2_ComponentData {CombatMelee = 100 });
+                            _entityManager.AddComponent<SelectedUnit>(entity);
+                            //bufferSystem.AddComponent<SelectedUnit>(entityInQueryIndex,entity);
+                            Debug.Log(entity);
+                        }
+
+                    })
                     .WithoutBurst()
                     .Run();
-                    //.ScheduleParallel(); ATTENTION pas de burst ici , car Camera.main n'est pas une fonction ECS
-                    // Tout variable ou methods NON-ECS bloque burst?
+                //.ScheduleParallel(); ATTENTION pas de burst ici , car Camera.main n'est pas une fonction ECS
+                // Tout variable ou methods NON-ECS bloque burst?
             }
 
 
@@ -154,4 +161,4 @@ public class TestSelectionEntity : SystemBase
 
     }
 }
-
+    */

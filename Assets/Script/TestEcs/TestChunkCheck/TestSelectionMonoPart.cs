@@ -10,7 +10,7 @@ public class TestSelectionMonoPart : MonoBehaviour
 
     public RectTransform selectionBox;
 
-    private TestSelectionEntity _testSelectionEntity;
+    //private TestSelectionEntity _testSelectionEntity;
 
     private float3 _startPosition;
 
