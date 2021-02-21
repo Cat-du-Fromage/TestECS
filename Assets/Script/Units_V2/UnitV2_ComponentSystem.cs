@@ -70,7 +70,6 @@ public class UnitV2_ComponentSystem : SystemBase
 
     public void MergeEntitiesTogether(Entity parent, Entity child)
     {
-
         if (!_entityManager.HasComponent(child, typeof(Parent)))
         {
             _entityManager.AddComponentData(child, new Parent { Value = parent });

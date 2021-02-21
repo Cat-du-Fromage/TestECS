@@ -33,9 +33,11 @@ public struct Highlight : IComponentData
 {
 
 }
-
+/*
 public struct Attach : IComponentData
 {
     public Entity Parent;
     public Entity Child;
 }
+*/
+

@@ -75,7 +75,7 @@ public class TestChunkSystem : SystemBase
         {
             // Create a temporary Array of chunks containing the query
             NativeArray<ArchetypeChunk> chunks = query.CreateArchetypeChunkArray(Allocator.TempJob);
-            //REMPLACE ArchetypeChunkComponentType,  get the component in entityManager and set if we can write or not;
+            //REMPLACE ArchetypeChunkComponentType,  get the component in entityManager and set if it's readOnly or not;
             ComponentTypeHandle<CompA> aType = _entityManager.GetComponentTypeHandle<CompA>(false);
             //Go through the array of chunks created before(which contains the archetype we want)
             foreach (ArchetypeChunk chunk in chunks)

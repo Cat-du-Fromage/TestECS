@@ -6,7 +6,7 @@ using Unity.Entities;
 using Unity.Rendering;
 using Unity.Transforms;
 using Unity.Mathematics;
-
+/*
 public struct CompC : IComponentData
 {
     public int Health;
@@ -101,3 +101,4 @@ public class TestMassEntityCreationIteration : SystemBase
 
     }
 }
+*/

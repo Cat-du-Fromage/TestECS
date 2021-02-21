@@ -64,13 +64,14 @@ public class TestSelectionEntity : SystemBase
     // Start is called before the first frame update
     protected override void OnCreate()
     {
-        base.OnCreate();
+        _entityManager = World.DefaultGameObjectInjectionWorld.EntityManager;
+        //UnityEngine.Material materialSelect = Resources.Load("Material/Highlight.mat", typeof(UnityEngine.Material)) as UnityEngine.Material;
     }
 
     protected override void OnStartRunning()
     {
         dragSelect = false;
-        _entityManager = World.DefaultGameObjectInjectionWorld.EntityManager;
+        UnityEngine.Material materialSelect = Resources.Load("Material/Highlight.mat", typeof(UnityEngine.Material)) as UnityEngine.Material;
     }
 
     // Update is called once per frame
@@ -123,6 +124,7 @@ public class TestSelectionEntity : SystemBase
                 //WHY not the z vector???!!
                 float3 lowerLeftPosition = new float3(math.min(startPosition.x, endPosition.x), math.min(startPosition.y, endPosition.y), 0);
                 float3 upperRightPosition = new float3(math.max(startPosition.x, endPosition.x), math.max(startPosition.y, endPosition.y), 0);
+                ComponentTypeHandle<MeshRenderer> RenderMesh = _entityManager.GetComponentTypeHandle<MeshRenderer>(false);
                 Entities
                     .WithStructuralChanges() // allow to use MainThread structural change , CAREFULL this does not allow BURST COMPILE
                     .WithAll<UnitV2_ComponentData>()//Select Only Entities wit at least this component
@@ -139,7 +141,6 @@ public class TestSelectionEntity : SystemBase
                     {
                         _entityManager.SetComponentData<UnitV2_ComponentData>(entity, new UnitV2_ComponentData { CombatMelee = 100 });// ATTENTION: no need for ".WithStructuralChanges()" 
                         _entityManager.AddComponent<SelectedUnit>(entity); // Add SelectionComponent : ATTENTION: NEED ".WithStructuralChanges()" to work
-                        Debug.Log(entity);
                     }
 
                 })

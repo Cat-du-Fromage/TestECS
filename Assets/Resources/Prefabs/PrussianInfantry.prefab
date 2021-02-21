@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 1146589372220857118}
   - component: {fileID: -667946315184763098}
   - component: {fileID: -4658522121190648044}
+  - component: {fileID: 6445228495332227389}
   m_Layer: 6
   m_Name: PrussianInfantry
   m_TagString: Untagged
@@ -276,3 +277,20 @@ MonoBehaviour:
     Tag05: 0
     Tag06: 0
     Tag07: 0
+--- !u!114 &6445228495332227389
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4151127835185135552}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: de7addb3284de0745985fe814f5cabd8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  material0: {fileID: 2100000, guid: 33e0ff4da8343584eb5bd1551cb448b7, type: 2}
+  material1: {fileID: 2100000, guid: d1c50223197f1fc40af88fc51ea9177b, type: 2}
+  frequency: 0
+  frame: 0
+  active: 0
