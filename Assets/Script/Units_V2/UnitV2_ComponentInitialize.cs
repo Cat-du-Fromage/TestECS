@@ -12,7 +12,7 @@ public class UnitV2_ComponentInitialize
     private static RenderMesh _unitRenderer;
     private static EntityManager _entityManager;
 
-    [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]
+    //[RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]
     public static void Initialize()
     {
         _entityManager = World.DefaultGameObjectInjectionWorld.EntityManager;
@@ -26,7 +26,7 @@ public class UnitV2_ComponentInitialize
             typeof(LocalToWorld)
             );
     }
-    [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.AfterSceneLoad)]
+    //[RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.AfterSceneLoad)]
     public static void InitializeWithScene()
     {
         //_unitRenderer = 

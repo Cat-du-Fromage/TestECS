@@ -291,6 +291,3 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   material0: {fileID: 2100000, guid: 33e0ff4da8343584eb5bd1551cb448b7, type: 2}
   material1: {fileID: 2100000, guid: d1c50223197f1fc40af88fc51ea9177b, type: 2}
-  frequency: 0
-  frame: 0
-  active: 0

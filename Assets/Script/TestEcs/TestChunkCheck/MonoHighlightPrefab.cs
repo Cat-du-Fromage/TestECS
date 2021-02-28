@@ -15,10 +15,10 @@ public class MonoHighlightPrefab : MonoBehaviour, IDeclareReferencedPrefabs, ICo
     public GameObject HighlightPrefab;
 
     public static Entity prefabEntity;
-    /*
-    private EntityManager _entityManager;
-    private EntityArchetype _highLightArchetype;
-    */
+    
+    //private EntityManager _entityManager;
+    //private EntityArchetype _highLightArchetype;
+    
     public void DeclareReferencedPrefabs(List<GameObject> referencedPrefabs)
     {
         referencedPrefabs.Add(HighlightPrefab);
@@ -36,19 +36,21 @@ public class MonoHighlightPrefab : MonoBehaviour, IDeclareReferencedPrefabs, ICo
         dstManager.AddComponentData(entity, _highLightData);
     }
     
-    // Start is called before the first frame update
-    void Start()
-    {
-        //setHighlight();
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
-
     /*
+    public void MergeEntitiesTogether(Entity parent, Entity child)
+    {
+        _entityManager = World.DefaultGameObjectInjectionWorld.EntityManager;
+        if (!_entityManager.HasComponent(child, typeof(Parent)))
+        {
+            _entityManager.AddComponentData(child, new Parent { Value = parent });
+            _entityManager.AddComponentData(child, new LocalToParent());
+
+            DynamicBuffer<LinkedEntityGroup> buf = m.GetBuffer<LinkedEntityGroup>(parent);
+            buf.Add(child);
+        }
+    }
+
+    
     //FAIL TEST TO MAKE A FULL ESC entity mesh generation
     public Entity setHighlight()
     {
@@ -73,13 +75,13 @@ public class MonoHighlightPrefab : MonoBehaviour, IDeclareReferencedPrefabs, ICo
         {
             Value = new float3(1f,0.125f,1f)
         });
-
+        
         _entityManager.AddSharedComponentData(entity, new RenderMesh
         {
             mesh = _highlightMesh,
             material = _highlightMaterial
         });
-
+        
         return entity;
     }
     */

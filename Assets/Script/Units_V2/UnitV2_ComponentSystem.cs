@@ -65,7 +65,24 @@ public class UnitV2_ComponentSystem : SystemBase
     // Update is called once per frame
     protected override void OnUpdate()
     {
+        //ATTENTION will not function with more than 1 regiment since it take a singelton entity(probably the first on the list)
+        EntityQuery regiment = GetEntityQuery(typeof(RegimentData));
+        Entity reg = regiment.GetSingletonEntity();
+        Entities
+            .WithStructuralChanges()
+            .WithoutBurst()
+            .WithAll<UnitV2_ComponentData>()
+            .ForEach((Entity child) =>
+            {
+                if (!_entityManager.HasComponent(child, typeof(Parent)))
+                {
+                    _entityManager.AddComponentData(child, new Parent { Value = reg });
+                    _entityManager.AddComponentData(child, new LocalToParent());
 
+                    DynamicBuffer<LinkedEntityGroup> buf = _entityManager.GetBuffer<LinkedEntityGroup>(reg);
+                    buf.Add(child);
+                }
+            }).Run();
     }
 
     public void MergeEntitiesTogether(Entity parent, Entity child)

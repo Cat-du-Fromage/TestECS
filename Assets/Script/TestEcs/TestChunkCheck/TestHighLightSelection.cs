@@ -41,7 +41,7 @@ public class TestHighLightSelection : SystemBase
             _entityManager.SetComponentData(entity, new Parent { Value = selectedUnit});
             _entityManager.AddComponent<LocalToParent>(entity);
             _entityManager.AddComponent<Child>(selectedUnit);
-            
+
             //exemple DynamicBuffer POUR REGIMENT
             DynamicBuffer<Child> linkedEntities = EntityManager.AddBuffer<Child>(selectedUnit);
             linkedEntities.Add(new Child { Value = selectedUnit });
@@ -53,7 +53,8 @@ public class TestHighLightSelection : SystemBase
         })
             .WithoutBurst()
             .Run();
-        */
         
+        */
     }
+        
 }
